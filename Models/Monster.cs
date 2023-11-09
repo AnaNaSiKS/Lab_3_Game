@@ -29,7 +29,7 @@ namespace Lab_3_C.Models
             monster.Hp -= damage;
         }
 
-        public abstract void Show();
+        
 
         public int GetHit()
         {
@@ -47,6 +47,8 @@ namespace Lab_3_C.Models
         {
             CooldownAbsoluteHit--;
         }
+
+        public abstract void Show();
 
         public abstract void DoAnything();
     }

@@ -17,6 +17,8 @@ namespace Lab_3_C
             santa_Claus.Show();
 
             hero.Inventory.Add(new Bandage());
+            hero.Inventory.Add(new Chocolate());
+            hero.Inventory.Add(new PowerEngineer());
             hero.Show();
         }
     }
