@@ -18,7 +18,7 @@ namespace Lab_3_C.Monsters
         public string Face { get { return face; } set { face = value; } }
         public string MiniFace { get { return miniFace; } set { miniFace = value; } }
 
-        public Santa_Claus()
+        public Santa_Claus(int x, int y)
         {
             Name = "Santa Claus";
             Face = "⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿" +
@@ -47,6 +47,8 @@ namespace Lab_3_C.Monsters
             BasicHit = new int[] { 5, 10 };
             AbsoluteHit = new int[] { 40, 60 };
             CooldownAbsoluteHit = 5;
+            X = x;
+            Y = y;
         }
 
         public override void Show()
@@ -65,6 +67,7 @@ namespace Lab_3_C.Monsters
 
             Console.ForegroundColor = ConsoleColor.White;
         }
+
 
         public override void DoAnything()
         {

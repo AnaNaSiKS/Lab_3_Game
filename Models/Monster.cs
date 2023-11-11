@@ -12,25 +12,37 @@ namespace Lab_3_C.Models
         private int[] basicHit;
         private int[] absoluteHit;
         private int cooldownAbsoluteHit;
+        private int x;
+        private int y;
+        private bool isDefeat = false;
 
         public int Hp { get { return hp; } set { hp = value; } }
         public int[] BasicHit { get { return basicHit; } set { basicHit = value; } }
         public int[] AbsoluteHit { get { return absoluteHit; } set { absoluteHit = value; } }
         public int CooldownAbsoluteHit { get { return cooldownAbsoluteHit; } set { cooldownAbsoluteHit = value; } }
+        public int X { get { return x; } set { x = value; } }
+        public int Y { get { return y; } set { y = value; } }
+        public bool IsDefeat { get { return isDefeat; } set { isDefeat = value; } }
 
 
         public virtual void StrikeBaseHit(Monster monster, int damage)
         {
             monster.Hp -= damage;
+            if (monster.Hp <= 0)
+                IsDefeat = true;
         }
 
         public virtual void StrikeAbsoluteHit(Monster monster, int damage)
         {
             monster.Hp -= damage;
+            if (monster.Hp <= 0)
+                IsDefeat = true;
         }
-
-        
-
+        public void SetXY(int x, int y) 
+        { 
+            X = x; 
+            Y = y; 
+        }
         public int GetHit()
         {
             Random random = new Random();
@@ -51,5 +63,7 @@ namespace Lab_3_C.Models
         public abstract void Show();
 
         public abstract void DoAnything();
+
+
     }
 }

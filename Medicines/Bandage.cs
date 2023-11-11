@@ -15,7 +15,7 @@ namespace Lab_3_C.Medicines
         public Bandage()
         {
             Name = "Бинт";
-            Description = "Обычный бинт. Пополняет здоровье от 20 до 30 очков (Случайно)";
+            Description = "Восстановление +20 - +30";
             Healing = new int[] { 20, 30 };
         }
     }

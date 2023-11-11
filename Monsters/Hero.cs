@@ -10,7 +10,11 @@ namespace Lab_3_C.Monsters
     internal class Hero : Monster
     {
         public Inventory Inventory { get; set; }
-        public Hero()
+
+        private string miniFace;
+
+        public string MiniFace { get { return miniFace; } set { miniFace = value; } }
+        public Hero(int x, int y)
         {
             Random random = new Random();
             Hp = random.Next(100, 120);
@@ -23,6 +27,11 @@ namespace Lab_3_C.Monsters
             AbsoluteHit = new int[] { 45, 55 };
 
             CooldownAbsoluteHit = 3;
+
+            MiniFace = "*";
+
+            X = x;
+            Y = y;
 
             Inventory = new Inventory();
         }
@@ -40,14 +49,19 @@ namespace Lab_3_C.Monsters
             Console.WriteLine($"До абсолютного умения {CooldownAbsoluteHit} ходов");
 
             Console.ForegroundColor = ConsoleColor.White;
-
-            Inventory.Show();
         }
 
         public override void DoAnything()
         {
-            Console.WriteLine("Совершите действие: 1. Атаковать обычной атакой \n2. Атаковать абсолютным умением\n3. Инвентарь");
+            //    Console.WriteLine("Совершите действие: \n1. Атаковать обычной атакой \n2. Атаковать абсолютным умением\n3. Инвентарь");
+            //    var action = Convert.ToInt32(Console.ReadLine());
 
+            //    switch (action)
+            //    {
+            //        case 1: 
+            //            Console.WriteLine(); 
+            //            break;
+            //    }
         }
     }
 }

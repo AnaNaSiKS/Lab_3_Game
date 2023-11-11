@@ -14,16 +14,24 @@ namespace Lab_3_C.Models
             items = new List<Medicine>();
         }
 
-        public void Show()
+        public void Show(int x, int y)
         {
             if (items.Count == 0)
-                Console.WriteLine("Инвентарь пуст");
+            {
+                Console.SetCursorPosition(x, y);
+                Console.Write(" Инвентарь пуст");
+                y++;
+            }
             else
             {
-                Console.WriteLine("Инвентарь:");
+                Console.SetCursorPosition(x, y);
+                Console.Write(" Инвентарь:");
+                y++;
                 foreach (var item in items)
                 {
-                    Console.WriteLine(item.Name + $" ({item.Description})");
+                    Console.SetCursorPosition(x, y);
+                    Console.Write(" " + item.Name + $" ({item.Description})");
+                    y++;
                 }
             }
         }

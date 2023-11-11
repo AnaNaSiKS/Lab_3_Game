@@ -14,7 +14,7 @@ namespace Lab_3_C.Medicines
 
         public Chocolate() {
             Name = "Шоколад";
-            Description = "Шоколад Snickers. Восстанавливает здоровье в размере 5 очков и усиляет силу атаки на 10 очков";
+            Description = "Восстановление +5. Сала атаки +10";
             Healing = 5;
             Gain = 10;
         }
