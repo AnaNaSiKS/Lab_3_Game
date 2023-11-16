@@ -12,6 +12,7 @@ namespace Lab_3_C
 
         static void Main(string[] args)
         {
+            List<Monster> monsters = new List<Monster>();
             Hero _hero = new Hero(15, 15);
             Santa_Claus _santa_Claus = new Santa_Claus(25, 5);
 
@@ -28,14 +29,19 @@ namespace Lab_3_C
 
             Console.CursorVisible = false;
             ConsoleKeyInfo k;
+
             Console.Clear();
+
+            Console.SetCursorPosition(_santa_Claus.X, _santa_Claus.Y);
+            Console.Write(_santa_Claus.MiniFace);
+
             Border();
             PlayerStatistic();
+            
             do
             {
                 
-                Console.SetCursorPosition(_santa_Claus.X, _santa_Claus.Y);
-                Console.Write(_santa_Claus.MiniFace);
+                
 
                 Console.SetCursorPosition(_hero.X, _hero.Y);
                 Console.Write(_hero.MiniFace);
@@ -69,16 +75,32 @@ namespace Lab_3_C
 
                 if (_hero.X == _santa_Claus.X && _hero.Y == _santa_Claus.Y)
                 {
-                    Console.Clear();
-                    Console.WriteLine("EPIC WIN!");
+                    Attack(_hero, _santa_Claus);
+                    
                 }
 
             } while (k.Key != ConsoleKey.Escape); // выходим из цикла по нажатию Esc
 
             void Attack(Monster attacking, Monster defending)
             {
+                AttackWindow();
 
+                MobsStatistic(defending);
             }
+
+
+            void MobsStatistic(Monster monster)
+            {
+                Console.SetCursorPosition(23, 19);
+                Console.Write($"Здоровье {monster.Hp}");
+                Console.SetCursorPosition(20, 20);
+                Console.Write($"Базовая атака {monster.BasicHit[0]}/{monster.BasicHit[1]}");
+                Console.SetCursorPosition(18, 21);
+                Console.Write($"Абсолютная атака {monster.AbsoluteHit[0]}/{monster.AbsoluteHit[1]}");
+                Console.SetCursorPosition(17, 22);
+                Console.Write($"До абсолютного умения {monster.CooldownAbsoluteHit}");
+            }
+
 
             void Border()
             {
@@ -116,6 +138,18 @@ namespace Lab_3_C
                 Console.SetCursorPosition(79,22);
                 Console.Write($"До абсолютного умения {_hero.CooldownAbsoluteHit}");
                 _hero.Inventory.Show(61,23);
+            }
+
+            void AttackWindow() 
+            { 
+                for (int i = 1; i < Console.WindowWidth / 2; i++)
+                {
+                    for (int j = 1; j < Console.WindowHeight - 1; j++)
+                    {
+                        Console.SetCursorPosition(i, j);
+                        Console.Write(" ");
+                    }
+                }
             }
         }
 
