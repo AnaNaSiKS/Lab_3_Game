@@ -12,6 +12,6 @@ namespace Lab_3_C
     {
         public List<Monster> monsters = new List<Monster>();
         public List<Models.Object> objects = new List<Models.Object>();
-        //public int[,] 
+        public int[,] walls = new int[28, 58];
     }
 }
