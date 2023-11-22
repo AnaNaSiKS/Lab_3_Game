@@ -10,10 +10,6 @@ namespace Lab_3_C.Monsters
     internal class Hero : Monster
     {
         public Inventory Inventory { get; set; }
-
-        private string miniFace;
-
-        public string MiniFace { get { return miniFace; } set { miniFace = value; } }
         public Hero(int x, int y)
         {
             Random random = new Random();
@@ -36,32 +32,22 @@ namespace Lab_3_C.Monsters
             Inventory = new Inventory();
         }
 
-        public override void Show()
+        public override void ShowFace(int x, int y)
         {
-            Console.WriteLine("Герой");
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"Здоровье {Hp}");
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine($"Урон {BasicHit[0]}|{BasicHit[1]}");
-            Console.ForegroundColor = ConsoleColor.Blue;
-            Console.WriteLine($"Урон абсолютного умения {AbsoluteHit[0]}|{AbsoluteHit[1]}");
-            Console.ForegroundColor = ConsoleColor.DarkBlue;
-            Console.WriteLine($"До абсолютного умения {CooldownAbsoluteHit} ходов");
-
-            Console.ForegroundColor = ConsoleColor.White;
-        }
-
-        public override void DoAnything()
-        {
-            //    Console.WriteLine("Совершите действие: \n1. Атаковать обычной атакой \n2. Атаковать абсолютным умением\n3. Инвентарь");
-            //    var action = Convert.ToInt32(Console.ReadLine());
-
-            //    switch (action)
-            //    {
-            //        case 1: 
-            //            Console.WriteLine(); 
-            //            break;
-            //    }
+            Console.SetCursorPosition(x, y);
+            Console.Write("|||||||||||||||||");
+            Console.SetCursorPosition(x, y + 1);
+            Console.Write("|||||||||||||||||");
+            Console.SetCursorPosition(x, y + 2);
+            Console.Write("|||||||||||||||||");
+            Console.SetCursorPosition(x, y + 3);
+            Console.Write("|||||||||||||||||");
+            Console.SetCursorPosition(x, y + 4);
+            Console.Write("|||||||||||||||||");
+            Console.SetCursorPosition(x, y + 5);
+            Console.Write("|||||||||||||||||");
+            Console.SetCursorPosition(x, y + 6);
+            Console.Write("|||||||||||||||||");
         }
     }
 }

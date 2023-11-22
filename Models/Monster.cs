@@ -12,6 +12,8 @@ namespace Lab_3_C.Models
         private int[] basicHit;
         private int[] absoluteHit;
         private int cooldownAbsoluteHit;
+        private string miniFace { get; set; }
+        private string name { get;set; }
         private int x;
         private int y;
         private bool isDefeat = false;
@@ -23,6 +25,8 @@ namespace Lab_3_C.Models
         public int X { get { return x; } set { x = value; } }
         public int Y { get { return y; } set { y = value; } }
         public bool IsDefeat { get { return isDefeat; } set { isDefeat = value; } }
+        public string MiniFace { get { return miniFace; } set { miniFace = value; } }   
+        public string Name { get { return name; } set { name = value; } }
 
 
         public virtual void StrikeBaseHit(Monster monster, int damage)
@@ -59,11 +63,6 @@ namespace Lab_3_C.Models
         {
             CooldownAbsoluteHit--;
         }
-
-        public abstract void Show();
-
-        public abstract void DoAnything();
-
-
+        public abstract void ShowFace(int x, int y);
     }
 }

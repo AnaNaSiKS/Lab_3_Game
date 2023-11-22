@@ -1,6 +1,7 @@
 ﻿using Lab_3_C.Medicines;
 using Lab_3_C.Models;
 using Lab_3_C.Monsters;
+using Lab_3_C.Objects;
 using System.Diagnostics;
 using System.IO.Pipes;
 using System.Text;
@@ -12,20 +13,15 @@ namespace Lab_3_C
 
         static void Main(string[] args)
         {
-            List<Monster> monsters = new List<Monster>();
+            Playground playground = new Playground();
             Hero _hero = new Hero(15, 15);
             Santa_Claus _santa_Claus = new Santa_Claus(25, 5);
 
-            _santa_Claus.Show();
-            _hero.Show();
-
-
-            _santa_Claus.Show();
+            playground.monsters.Add(_santa_Claus);
 
             _hero.Inventory.Add(new Bandage());
             _hero.Inventory.Add(new Chocolate());
             _hero.Inventory.Add(new PowerEngineer());
-            _hero.Show();
 
             Console.CursorVisible = false;
             ConsoleKeyInfo k;
@@ -37,12 +33,10 @@ namespace Lab_3_C
 
             Border();
             PlayerStatistic();
-            
+            SetWalls();
+            ShowWalls();
             do
             {
-                
-                
-
                 Console.SetCursorPosition(_hero.X, _hero.Y);
                 Console.Write(_hero.MiniFace);
 
@@ -91,9 +85,15 @@ namespace Lab_3_C
 
             void MobsStatistic(Monster monster)
             {
+                monster.ShowFace(20,8);
+                Console.SetCursorPosition(23, 17);
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write(monster.Name);
                 Console.SetCursorPosition(23, 19);
+                Console.ForegroundColor = ConsoleColor.Green;
                 Console.Write($"Здоровье {monster.Hp}");
                 Console.SetCursorPosition(20, 20);
+                Console.ForegroundColor = ConsoleColor.White;
                 Console.Write($"Базовая атака {monster.BasicHit[0]}/{monster.BasicHit[1]}");
                 Console.SetCursorPosition(18, 21);
                 Console.Write($"Абсолютная атака {monster.AbsoluteHit[0]}/{monster.AbsoluteHit[1]}");
@@ -149,6 +149,18 @@ namespace Lab_3_C
                         Console.SetCursorPosition(i, j);
                         Console.Write(" ");
                     }
+                }
+            }
+
+            void SetWalls() {
+                playground.objects.Add(new Wall(2,1));
+            }
+
+            void ShowWalls() { 
+                foreach (Wall wall in playground.objects)
+                {
+                    Console.SetCursorPosition(wall.X, wall.Y);
+                    Console.Write(wall.Face);
                 }
             }
         }

@@ -1,24 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Lab_3_C.Models;
+using System.Xml.Linq;
 
 namespace Lab_3_C.Monsters
 {
-    internal class Santa_Claus : Monster
+    internal class CouldDog: Models.Monster
     {
-        public Santa_Claus(int x, int y)
+        public CouldDog(int x, int y)
         {
-            Name = "Santa Claus";
-            MiniFace = "%";
+            Name = "CouldDog";
+            MiniFace = "@";
             Random random = new Random();
-            Hp = random.Next(120, 150);
-            BasicHit = new int[] { 5, 10 };
-            AbsoluteHit = new int[] { 40, 60 };
-            CooldownAbsoluteHit = 5;
+            Hp = random.Next(50, 60);
+            BasicHit = new int[] { 5, 7 };
+            AbsoluteHit = new int[] { 30, 35 };
+            CooldownAbsoluteHit = 2;
             X = x;
             Y = y;
         }
