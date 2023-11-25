@@ -33,7 +33,9 @@ namespace Lab_3_C.Models
         {
             monster.Hp -= damage;
             if (monster.Hp <= 0)
+            {
                 IsDefeat = true;
+            }
         }
 
         public virtual void StrikeAbsoluteHit(Monster monster, int damage)

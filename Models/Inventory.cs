@@ -40,5 +40,10 @@ namespace Lab_3_C.Models
         {
             items.Add(medicine);
         }
+
+        public void Remove(Medicine medicine)
+        {
+            items.Remove(medicine);
+        }
     }
 }

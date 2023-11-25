@@ -18,5 +18,10 @@ namespace Lab_3_C.Medicines
             Description = "Восстановление +20 - +30";
             Healing = new int[] { 20, 30 };
         }
+
+        public int GetHeal() { 
+            Random random = new Random();
+            return random.Next(Healing[0] - 1, Healing[1]);
+        }
     }
 }
