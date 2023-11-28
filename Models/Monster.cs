@@ -16,7 +16,7 @@ namespace Lab_3_C.Models
         private string name { get;set; }
         private int x;
         private int y;
-        private bool isDefeat = false;
+        private bool isDefeat;
 
         public int Hp { get { return hp; } set { hp = value; } }
         public int[] BasicHit { get { return basicHit; } set { basicHit = value; } }

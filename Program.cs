@@ -15,10 +15,17 @@ namespace Lab_3_C
         {
             Playground playground = new Playground();
             Hero _hero = new Hero(15, 15);
-            Santa_Claus _santa_Claus = new Santa_Claus(25, 5);
+            Santa_Claus santa_Claus = new Santa_Claus(25, 5);
+            CouldDog couldDog = new CouldDog(25, 4);
+            Dog dog = new Dog(24, 5);
 
-            playground.monsters.Add(_santa_Claus);
+            SetWalls();
 
+            playground.monsters.Add(santa_Claus);
+            playground.monsters.Add(couldDog);
+            playground.monsters.Add(dog);
+
+            _hero.Inventory.Add(new Bandage());
             _hero.Inventory.Add(new Bandage());
             _hero.Inventory.Add(new Chocolate());
             _hero.Inventory.Add(new PowerEngineer());
@@ -26,81 +33,17 @@ namespace Lab_3_C
             Console.CursorVisible = false;
             ConsoleKeyInfo k;
 
-            Console.Clear();
-
-            Console.SetCursorPosition(_santa_Claus.X, _santa_Claus.Y);
-            Console.Write(_santa_Claus.MiniFace);
-
-            Border();
-            PlayerStatistic();
-            SetWalls();
-            ShowWalls();
-            do
-            {
-                Console.SetCursorPosition(_hero.X, _hero.Y);
-                Console.Write(_hero.MiniFace);
-
-                k = Console.ReadKey(true);
-                
-                Console.SetCursorPosition(_hero.X, _hero.Y);
-                Console.Write(" ");
-                if (k.Key == ConsoleKey.UpArrow)
-                {
-                    if (_hero.Y - 1 > 0)
-                    {
-                        if (CheckPlaygroundWalls(_hero.X, _hero.Y - 1) == false)
-                        {
-                            _hero.SetXY(_hero.X, _hero.Y - 1);
-                        }
-                    }
-                }
-                else if (k.Key == ConsoleKey.DownArrow)
-                {
-                    if (_hero.Y + 1 < Console.WindowHeight - 1)
-                    {
-                        if (CheckPlaygroundWalls(_hero.X, _hero.Y + 1) == false)
-                        {
-                            _hero.SetXY(_hero.X, _hero.Y + 1);
-                        }
-                    }
-                }
-                else if (k.Key == ConsoleKey.LeftArrow)
-                {
-                    if (_hero.X - 1 > 0)
-                    {
-                        if (CheckPlaygroundWalls(_hero.X - 1, _hero.Y) == false)
-                        {
-                            _hero.SetXY(_hero.X - 1, _hero.Y);
-                        }
-                    }
-                }
-                else if (k.Key == ConsoleKey.RightArrow)
-                {
-                    if (_hero.X + 1 < (Console.WindowWidth / 2) - 1)
-                    {
-                        if (CheckPlaygroundWalls(_hero.X + 1, _hero.Y) == false)
-                        {
-                            _hero.SetXY(_hero.X + 1, _hero.Y);
-                        }
-                    }
-                }
-
-                
-
-                if (_hero.X == _santa_Claus.X && _hero.Y == _santa_Claus.Y)
-                {
-                    Attack(_hero, _santa_Claus);
-                    
-                }
-
-            } while (k.Key != ConsoleKey.Escape);
+            Play();
 
             void Attack(Monster attacking, Monster defending)
             {
                 ClearMonsterWindow();
                 MobsStatistic(defending);
-                do
+
+                while (defending.Hp >= 0)
                 {
+                    if (defending.Hp <= 0) break;
+
                     k = Console.ReadKey(true);
 
                     if (k.Key == ConsoleKey.D1)
@@ -110,8 +53,11 @@ namespace Lab_3_C
                     }
                     else if (k.Key == ConsoleKey.D2)
                     {
-                        attacking.StrikeAbsoluteHit(defending, attacking.GetAbsoluteHit());
-                        MobsStatistic(defending);
+                        if (attacking.CooldownAbsoluteHit <= 0)
+                        {
+                            attacking.StrikeAbsoluteHit(defending, attacking.GetAbsoluteHit());
+                            MobsStatistic(defending);
+                        }
                     }
                     else if (k.Key == ConsoleKey.D3)
                     {
@@ -126,10 +72,86 @@ namespace Lab_3_C
                         CheckMedicine(new PowerEngineer());
                     }
 
-                    Console.WriteLine(defending.IsDefeat);
-                }
-                while (defending.IsDefeat == false);
-                Console.WriteLine("Выход из цикла");
+                    if (defending.CooldownAbsoluteHit <= 0)
+                    {
+                        defending.StrikeAbsoluteHit(attacking, defending.GetHit());
+                        PlayerStatistic();
+                    }
+                    else
+                    { 
+                        defending.StrikeBaseHit(attacking, defending.GetHit());
+                        PlayerStatistic();
+                    }
+
+                    defending.CooldownAbsoluteHit--;
+                    attacking.CooldownAbsoluteHit--;
+                };
+
+                playground.monsters.Remove(defending);
+                Play();
+            }
+
+            void Play() 
+            {
+                Console.Clear();
+
+                Border();
+                PlayerStatistic();
+                ShowPlayground();
+                do
+                {
+                    Console.SetCursorPosition(_hero.X, _hero.Y);
+                    Console.Write(_hero.MiniFace);
+
+                    k = Console.ReadKey(true);
+
+                    Console.SetCursorPosition(_hero.X, _hero.Y);
+                    Console.Write(" ");
+                    if (k.Key == ConsoleKey.UpArrow)
+                    {
+                        if (_hero.Y - 1 > 0)
+                        {
+                            if (CheckPlaygroundWalls(_hero.X, _hero.Y - 1) == false)
+                            {
+                                CheckPlaygroundMonster(_hero.X, _hero.Y - 1);
+                                _hero.SetXY(_hero.X, _hero.Y - 1);
+                            }
+                        }
+                    }
+                    else if (k.Key == ConsoleKey.DownArrow)
+                    {
+                        if (_hero.Y + 1 < Console.WindowHeight - 1)
+                        {
+                            if (CheckPlaygroundWalls(_hero.X, _hero.Y + 1) == false)
+                            {
+                                CheckPlaygroundMonster(_hero.X, _hero.Y + 1);
+                                _hero.SetXY(_hero.X, _hero.Y + 1);
+                            }
+                        }
+                    }
+                    else if (k.Key == ConsoleKey.LeftArrow)
+                    {
+                        if (_hero.X - 1 > 0)
+                        {
+                            if (CheckPlaygroundWalls(_hero.X - 1, _hero.Y) == false)
+                            {
+                                CheckPlaygroundMonster(_hero.X - 1, _hero.Y);
+                                _hero.SetXY(_hero.X - 1, _hero.Y);
+                            }
+                        }
+                    }
+                    else if (k.Key == ConsoleKey.RightArrow)
+                    {
+                        if (_hero.X + 1 < (Console.WindowWidth / 2) - 1)
+                        {
+                            if (CheckPlaygroundWalls(_hero.X + 1, _hero.Y) == false)
+                            {
+                                CheckPlaygroundMonster(_hero.X + 1, _hero.Y);
+                                _hero.SetXY(_hero.X + 1, _hero.Y);
+                            }
+                        }
+                    }
+                } while (k.Key != ConsoleKey.Escape);
             }
 
             void MobsStatistic(Monster monster)
@@ -227,7 +249,7 @@ namespace Lab_3_C
 
 
             void SetWalls() {
-                int[,] walls = { {1,1,1,0,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,0,1,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,1,0,0,1,0,1,0,1,1,0,0,1,0,1,0 },
+                int[,] walls = { {1,1,1,0,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,0,1,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,1,0,0,1,0,1,0,1,1,0,0,1,0,1,0 },//28x58
                                  {1,1,1,0,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,0,1,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,1,0,0,1,0,1,0,1,1,0,0,1,0,1,0 },
                                  {1,1,1,0,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,0,1,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,1,0,0,1,0,1,0,1,1,0,0,1,0,1,0 },
                                  {1,1,1,0,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,0,1,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,1,0,0,1,0,1,0,1,1,0,0,1,0,1,0 },
@@ -307,9 +329,8 @@ namespace Lab_3_C
                     List<Bandage> bandages = _hero.Inventory.items.OfType<Bandage>().ToList();
                     if (bandages.Count > 0) 
                     {
-                        Bandage bandage = new Bandage();
-                        _hero.Hp += bandage.GetHeal();
-                        _hero.Inventory.Remove(bandage);
+                        _hero.Hp += bandages[0].GetHeal();
+                        _hero.Inventory.Remove(bandages[0]);
                         PlayerStatistic();
                     };
                 }
@@ -318,11 +339,10 @@ namespace Lab_3_C
                     List<Chocolate> chocolates = _hero.Inventory.items.OfType<Chocolate>().ToList();
                     if (chocolates.Count > 0)
                     {
-                        Chocolate chocolate = new Chocolate();
-                        _hero.Hp += chocolate.Healing;
-                        _hero.BasicHit[0] += chocolate.Gain;
-                        _hero.BasicHit[1] += chocolate.Gain;
-                        _hero.Inventory.Remove(chocolate);
+                        _hero.Hp += chocolates[0].Healing;
+                        _hero.BasicHit[0] += chocolates[0].Gain;
+                        _hero.BasicHit[1] += chocolates[0].Gain;
+                        _hero.Inventory.Remove(chocolates[0]);
                         PlayerStatistic();
                     };
 
@@ -332,12 +352,23 @@ namespace Lab_3_C
                     List<PowerEngineer> powerEngineers = _hero.Inventory.items.OfType<PowerEngineer>().ToList();
                     if (powerEngineers.Count > 0)
                     {
-                        PowerEngineer powerEngineer = new PowerEngineer();
                         _hero.CooldownAbsoluteHit = 0;
-                        _hero.Inventory.Remove(powerEngineer);
+                        _hero.Inventory.Remove(powerEngineers[0]);
                         PlayerStatistic();
                     };
                 }
+            }
+
+            void ShowPlayground() {
+                ClearMonsterWindow();
+
+                foreach (var monster in playground.monsters)
+                {
+                    Console.SetCursorPosition(monster.X, monster.Y);
+                    Console.Write(monster.MiniFace);
+                }
+
+                ShowWalls();
             }
         }
 
