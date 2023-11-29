@@ -14,7 +14,7 @@ namespace Lab_3_C.Medicines
         public PowerEngineer()
         {
             Name = "Энергетик";
-            Description = "Восстанавливает абсолбтное умение";
+            Description = "Восстанавливает абсолютное умение";
             removeCooldown = 20;
         }
     }

@@ -22,7 +22,8 @@ namespace Lab_3_C.Monsters
 
             AbsoluteHit = new int[] { 45, 55 };
 
-            CooldownAbsoluteHit = 3;
+            MaxCooldownAbsoluteHit = 3;
+            CooldownAbsoluteHit = MaxCooldownAbsoluteHit;
 
             MiniFace = "*";
 

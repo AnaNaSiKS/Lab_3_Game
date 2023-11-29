@@ -17,6 +17,7 @@ namespace Lab_3_C.Models
         private int x;
         private int y;
         private bool isDefeat;
+        private int maxCooldownAbsoluteHit;
 
         public int Hp { get { return hp; } set { hp = value; } }
         public int[] BasicHit { get { return basicHit; } set { basicHit = value; } }
@@ -27,6 +28,7 @@ namespace Lab_3_C.Models
         public bool IsDefeat { get { return isDefeat; } set { isDefeat = value; } }
         public string MiniFace { get { return miniFace; } set { miniFace = value; } }   
         public string Name { get { return name; } set { name = value; } }
+        public int MaxCooldownAbsoluteHit { get { return maxCooldownAbsoluteHit; } set { maxCooldownAbsoluteHit = value; } }
 
 
         public virtual void StrikeBaseHit(Monster monster, int damage)

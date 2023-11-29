@@ -18,7 +18,8 @@ namespace Lab_3_C.Monsters
             Hp = random.Next(120, 150);
             BasicHit = new int[] { 5, 10 };
             AbsoluteHit = new int[] { 40, 60 };
-            CooldownAbsoluteHit = 5;
+            MaxCooldownAbsoluteHit = 5;
+            CooldownAbsoluteHit = MaxCooldownAbsoluteHit;
             X = x;
             Y = y;
         }

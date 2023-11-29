@@ -37,11 +37,9 @@ namespace Lab_3_C
 
             void Attack(Monster attacking, Monster defending)
             {
-                ClearMonsterWindow();
-                MobsStatistic(defending);
-
                 while (defending.Hp >= 0)
                 {
+
                     if (defending.Hp <= 0) break;
 
                     k = Console.ReadKey(true);
@@ -49,45 +47,54 @@ namespace Lab_3_C
                     if (k.Key == ConsoleKey.D1)
                     {
                         attacking.StrikeBaseHit(defending, attacking.GetHit());
-                        MobsStatistic(defending);
                     }
                     else if (k.Key == ConsoleKey.D2)
                     {
                         if (attacking.CooldownAbsoluteHit <= 0)
                         {
                             attacking.StrikeAbsoluteHit(defending, attacking.GetAbsoluteHit());
-                            MobsStatistic(defending);
+                            attacking.CooldownAbsoluteHit = attacking.MaxCooldownAbsoluteHit;
                         }
+                        else continue;
                     }
                     else if (k.Key == ConsoleKey.D3)
                     {
-                        CheckMedicine(new Chocolate());
+                        if (!CheckMedicine(new Chocolate())) continue;
                     }
                     else if (k.Key == ConsoleKey.D4)
                     {
-                        CheckMedicine(new Bandage());
+                        if (!CheckMedicine(new Bandage())) continue;
                     }
                     else if (k.Key == ConsoleKey.D5)
                     {
-                        CheckMedicine(new PowerEngineer());
+                        if (!CheckMedicine(new PowerEngineer())) continue;
                     }
 
                     if (defending.CooldownAbsoluteHit <= 0)
                     {
-                        defending.StrikeAbsoluteHit(attacking, defending.GetHit());
-                        PlayerStatistic();
+                        defending.StrikeAbsoluteHit(attacking, defending.GetAbsoluteHit());
+                        defending.CooldownAbsoluteHit = defending.MaxCooldownAbsoluteHit;
                     }
                     else
                     { 
                         defending.StrikeBaseHit(attacking, defending.GetHit());
-                        PlayerStatistic();
+                    }
+
+                    if (attacking.Hp <= 0)
+                    {
+                        ShowLose();
                     }
 
                     defending.CooldownAbsoluteHit--;
-                    attacking.CooldownAbsoluteHit--;
+                    if (attacking.CooldownAbsoluteHit > 0)
+                        attacking.CooldownAbsoluteHit--;
+
+                    MobsStatistic(defending);
+                    PlayerStatistic();
                 };
 
                 playground.monsters.Remove(defending);
+
                 Play();
             }
 
@@ -323,7 +330,7 @@ namespace Lab_3_C
                 }
             }
 
-            void CheckMedicine(Medicine medicine) {
+            bool CheckMedicine(Medicine medicine) {
                 if (medicine is Bandage)
                 {
                     List<Bandage> bandages = _hero.Inventory.items.OfType<Bandage>().ToList();
@@ -332,6 +339,7 @@ namespace Lab_3_C
                         _hero.Hp += bandages[0].GetHeal();
                         _hero.Inventory.Remove(bandages[0]);
                         PlayerStatistic();
+                        return true;
                     };
                 }
                 else if (medicine is Chocolate)
@@ -344,6 +352,7 @@ namespace Lab_3_C
                         _hero.BasicHit[1] += chocolates[0].Gain;
                         _hero.Inventory.Remove(chocolates[0]);
                         PlayerStatistic();
+                        return true;
                     };
 
                 }
@@ -355,8 +364,10 @@ namespace Lab_3_C
                         _hero.CooldownAbsoluteHit = 0;
                         _hero.Inventory.Remove(powerEngineers[0]);
                         PlayerStatistic();
+                        return true;
                     };
                 }
+                return false;
             }
 
             void ShowPlayground() {
@@ -369,6 +380,12 @@ namespace Lab_3_C
                 }
 
                 ShowWalls();
+            }
+
+            void ShowLose()
+            {
+                Console.Clear();
+                Console.WriteLine("YOU LOSE");
             }
         }
 

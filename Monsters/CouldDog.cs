@@ -11,13 +11,14 @@ namespace Lab_3_C.Monsters
     {
         public CouldDog(int x, int y)
         {
-            Name = "CouldDog";
+            Name = "ColdDog";
             MiniFace = "@";
             Random random = new Random();
             Hp = random.Next(50, 60);
             BasicHit = new int[] { 5, 7 };
             AbsoluteHit = new int[] { 30, 35 };
-            CooldownAbsoluteHit = 2;
+            MaxCooldownAbsoluteHit = 2;
+            CooldownAbsoluteHit = MaxCooldownAbsoluteHit;
             X = x;
             Y = y;
         }
