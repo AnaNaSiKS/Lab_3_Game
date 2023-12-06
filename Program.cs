@@ -37,6 +37,9 @@ namespace Lab_3_C
 
             void Attack(Monster attacking, Monster defending)
             {
+                PlayerStatistic();
+                MobsStatistic(defending);
+
                 while (defending.Hp >= 0)
                 {
 
@@ -53,7 +56,7 @@ namespace Lab_3_C
                         if (attacking.CooldownAbsoluteHit <= 0)
                         {
                             attacking.StrikeAbsoluteHit(defending, attacking.GetAbsoluteHit());
-                            attacking.CooldownAbsoluteHit = attacking.MaxCooldownAbsoluteHit;
+                            attacking.CooldownAbsoluteHit = attacking.MaxCooldownAbsoluteHit + 1;
                         }
                         else continue;
                     }
@@ -69,21 +72,19 @@ namespace Lab_3_C
                     {
                         if (!CheckMedicine(new PowerEngineer())) continue;
                     }
+                    else { continue; }
 
                     if (defending.CooldownAbsoluteHit <= 0)
                     {
                         defending.StrikeAbsoluteHit(attacking, defending.GetAbsoluteHit());
-                        defending.CooldownAbsoluteHit = defending.MaxCooldownAbsoluteHit;
+                        defending.CooldownAbsoluteHit = defending.MaxCooldownAbsoluteHit + 1;
                     }
                     else
                     { 
                         defending.StrikeBaseHit(attacking, defending.GetHit());
                     }
 
-                    if (attacking.Hp <= 0)
-                    {
-                        ShowLose();
-                    }
+                     
 
                     defending.CooldownAbsoluteHit--;
                     if (attacking.CooldownAbsoluteHit > 0)
@@ -91,6 +92,11 @@ namespace Lab_3_C
 
                     MobsStatistic(defending);
                     PlayerStatistic();
+                    
+                   if (attacking.Hp <= 0)
+                   {
+                        ShowLose();
+                   }
                 };
 
                 playground.monsters.Remove(defending);
@@ -100,6 +106,11 @@ namespace Lab_3_C
 
             void Play() 
             {
+                if (_hero.Hp <= 0)
+                {
+                    ShowLose();
+                    return;
+                }
                 Console.Clear();
 
                 Border();
