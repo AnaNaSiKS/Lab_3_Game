@@ -26,19 +26,15 @@ namespace Lab_3_C.Monsters
         public override void ShowFace(int x, int y)
         {
             Console.SetCursorPosition(x, y);
-            Console.Write("|||||||||||||||||");
+            Console.Write("   / \\__");
             Console.SetCursorPosition(x, y + 1);
-            Console.Write("|||||||||||||||||");
+            Console.Write("  (    @\\___");
             Console.SetCursorPosition(x, y + 2);
-            Console.Write("|||||||||||||||||");
+            Console.Write("  /         O");
             Console.SetCursorPosition(x, y + 3);
-            Console.Write("|||||||||||||||||");
+            Console.Write(" /   (_____/");
             Console.SetCursorPosition(x, y + 4);
-            Console.Write("|||||||||||||||||");
-            Console.SetCursorPosition(x, y + 5);
-            Console.Write("|||||||||||||||||");
-            Console.SetCursorPosition(x, y + 6);
-            Console.Write("|||||||||||||||||");
+            Console.Write("/_____/   U");
         }
     }
 }

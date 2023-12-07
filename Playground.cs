@@ -18,5 +18,11 @@ namespace Lab_3_C
         public void DeleteMonster(Monster monster) { 
             monsters.Remove(monster);
         }
+
+        public void DeleteChest(Models.Object @object) {
+            objects.Remove(@object);
+        }
+
+        public int CheckMonsters() { return monsters.Count; }
     }
 }

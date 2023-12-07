@@ -10,13 +10,13 @@ namespace Lab_3_C.Medicines
     internal class Bandage : Medicine
     {
         private int[] healing;
-        public int[] Healing { get { return healing; } set { healing = value; } }
+        public int[] Healing { get { return healing; } }
 
         public Bandage()
         {
             Name = "Бинт";
             Description = "Восстановление +20 - +30";
-            Healing = new int[] { 20, 30 };
+            healing = new int[] { 20, 30 };
         }
 
         public int GetHeal() { 

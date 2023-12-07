@@ -9,14 +9,18 @@ namespace Lab_3_C.Medicines
 {
     internal class Chocolate : Medicine
     {
-        public int Healing { get; set; }
-        public int Gain { get; set; }
+        private int healing;
+        private int gain;
+        public int Healing { get { return healing; } }
+        public int Gain { get { return gain; }}
 
         public Chocolate() {
             Name = "Шоколад";
-            Description = "Восстановление +5. Сала атаки +10";
-            Healing = 5;
-            Gain = 10;
+            Description = "Восстановление +5. Базовая атака +10";
+            healing = 5;
+            gain = 10;
         }
+
+        
     }
 }

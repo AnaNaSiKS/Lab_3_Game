@@ -9,6 +9,7 @@ namespace Lab_3_C.Models
     public abstract class Monster
     {
         private int hp;
+        private int maxHp;
         private int[] basicHit;
         private int[] absoluteHit;
         private int cooldownAbsoluteHit;
@@ -30,21 +31,24 @@ namespace Lab_3_C.Models
         public string Name { get { return name; } set { name = value; } }
         public int MaxCooldownAbsoluteHit { get { return maxCooldownAbsoluteHit; } set { maxCooldownAbsoluteHit = value; } }
 
+        public int MaxHp { get => maxHp; set => maxHp = value; }
 
         public virtual void StrikeBaseHit(Monster monster, int damage)
         {
             monster.Hp -= damage;
             if (monster.Hp <= 0)
             {
-                IsDefeat = true;
+                monster.IsDefeat = true;
             }
+            else monster.IsDefeat = false;
         }
 
         public virtual void StrikeAbsoluteHit(Monster monster, int damage)
         {
             monster.Hp -= damage;
             if (monster.Hp <= 0)
-                IsDefeat = true;
+                monster.IsDefeat = true;
+            else monster.IsDefeat = false;
         }
         public void SetXY(int x, int y) 
         { 
@@ -63,10 +67,6 @@ namespace Lab_3_C.Models
             return random.Next(AbsoluteHit[0] - 1, AbsoluteHit[1]);
         }
 
-        public void CooldownOpMinus()
-        {
-            CooldownAbsoluteHit--;
-        }
         public abstract void ShowFace(int x, int y);
     }
 }

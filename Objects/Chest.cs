@@ -20,7 +20,7 @@ namespace Lab_3_C.Objects
 
         public Medicine ReturnItems() { 
             Random random = new Random();
-            int rd = random.Next(2);
+            int rd = random.Next(3);
             if (rd == 0)
             {
                 return new Bandage();
@@ -33,7 +33,7 @@ namespace Lab_3_C.Objects
             {
                 return new PowerEngineer();
             }
-            return null;
+            else return null;
         }
     }
 }
