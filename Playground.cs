@@ -23,6 +23,10 @@ namespace Lab_3_C
             objects.Remove(@object);
         }
 
+        public void DeleteTrap(Models.Object @object) { 
+            objects.Remove(@object);
+        }
+
         public int CheckMonsters() { return monsters.Count; }
     }
 }

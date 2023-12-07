@@ -4,6 +4,7 @@ using Lab_3_C.Monsters;
 using Lab_3_C.Objects;
 using System.Diagnostics;
 using System.IO.Pipes;
+using System.Net;
 using System.Text;
 
 namespace Lab_3_C
@@ -55,7 +56,7 @@ namespace Lab_3_C
                             if (CheckPlaygroundWalls(_hero.X, _hero.Y - 1) == false)
                             {
                                 CheckPlaygroundMonster(_hero.X, _hero.Y - 1);
-                                CheckChest(_hero.X, _hero.Y - 1);
+                                CheckObjects(_hero.X, _hero.Y - 1);
                                 _hero.SetXY(_hero.X, _hero.Y - 1);
                             }
                         }
@@ -67,7 +68,7 @@ namespace Lab_3_C
                             if (CheckPlaygroundWalls(_hero.X, _hero.Y + 1) == false)
                             {
                                 CheckPlaygroundMonster(_hero.X, _hero.Y + 1);
-                                CheckChest(_hero.X, _hero.Y + 1);
+                                CheckObjects(_hero.X, _hero.Y + 1);
                                 _hero.SetXY(_hero.X, _hero.Y + 1);
                             }
                         }
@@ -79,7 +80,7 @@ namespace Lab_3_C
                             if (CheckPlaygroundWalls(_hero.X - 1, _hero.Y) == false)
                             {
                                 CheckPlaygroundMonster(_hero.X - 1, _hero.Y);
-                                CheckChest(_hero.X - 1, _hero.Y);
+                                CheckObjects(_hero.X - 1, _hero.Y);
                                 _hero.SetXY(_hero.X - 1, _hero.Y);
                             }
                         }
@@ -91,7 +92,7 @@ namespace Lab_3_C
                             if (CheckPlaygroundWalls(_hero.X + 1, _hero.Y) == false)
                             {
                                 CheckPlaygroundMonster(_hero.X + 1, _hero.Y);
-                                CheckChest(_hero.X + 1, _hero.Y);
+                                CheckObjects(_hero.X + 1, _hero.Y);
                                 _hero.SetXY(_hero.X + 1, _hero.Y);
                             }
                         }
@@ -171,7 +172,6 @@ namespace Lab_3_C
                 Play();
             }
 
-
             #region Set
             void SetWalls()
             {
@@ -241,6 +241,7 @@ namespace Lab_3_C
                 SetWalls();
                 SetChest();
                 SetMonsters();
+                SetTrap();
             }
 
             void SetPlay()
@@ -251,6 +252,11 @@ namespace Lab_3_C
                 _hero = new Hero(2, 2);
 
                 Play();
+            }
+
+            void SetTrap() 
+            {
+                playground.objects.Add(new Trap(2 , 26));
             }
             #endregion
 
@@ -293,9 +299,10 @@ namespace Lab_3_C
                 catch { }
             }
 
-            void CheckChest(int x, int y)
+            void CheckObjects(int x, int y)
             {
                 List<Chest> chests = playground.objects.OfType<Chest>().ToList();
+                List<Trap> traps = playground.objects.OfType<Trap>().ToList();
 
                 if (chests != null)
                 {
@@ -305,6 +312,20 @@ namespace Lab_3_C
                         {
                             _hero.Inventory.Add(chest.ReturnItems());
                             playground.DeleteChest(chest);
+                            ShowPlayground();
+                            PlayerStatistic();
+                        }
+                    }
+                }
+
+                if (traps != null)
+                {
+                    foreach (Trap trap in traps)
+                    {
+                        if (trap.X == x && trap.Y == y)
+                        {
+                            trap.Hit(_hero);
+                            playground.DeleteTrap(trap);
                             ShowPlayground();
                             PlayerStatistic();
                         }
@@ -385,16 +406,28 @@ namespace Lab_3_C
             #endregion
 
             #region Show
-            void ShowChest()
+            void ShowObjects()
             {
-                foreach (var chest in playground.objects)
+                List<Chest> chestList = playground.objects.OfType<Chest>().ToList();
+                List<Trap> trapList = playground.objects.OfType<Trap>().ToList();
+                foreach (var chest in chestList)
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.SetCursorPosition(chest.X, chest.Y);
                     Console.Write(chest.Face);
                     Console.ForegroundColor = ConsoleColor.White;
                 }
+
+                foreach (var trap in trapList)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.SetCursorPosition(trap.X, trap.Y);
+                    Console.Write(trap.Face);
+                    Console.ForegroundColor = ConsoleColor.White;
+                }
             }
+
+            
 
             void ShowMonster()
             {
@@ -428,7 +461,7 @@ namespace Lab_3_C
 
                 ShowMonster();
                 ShowWalls();
-                ShowChest();
+                ShowObjects();
             }
 
             void ShowLose()
@@ -445,100 +478,100 @@ namespace Lab_3_C
                 }
             }
 
-                void ShowWictory()
+            void ShowWictory()
+            {
+                Console.Clear();
+                Console.WriteLine("Вы выиграли");
+
+                Console.WriteLine("Чтобы начать заново нажмите 1");
+
+                k = Console.ReadKey(true);
+
+                if (k.Key == ConsoleKey.D1)
                 {
-                    Console.Clear();
-                    Console.WriteLine("Вы выиграли");
-
-                    Console.WriteLine("Чтобы начать заново нажмите 1");
-
-                    k = Console.ReadKey(true);
-
-                    if (k.Key == ConsoleKey.D1)
-                    {
-                        SetPlay();
-                    }
+                    SetPlay();
+                }
             }
 
-                void MobsStatistic(Monster monster)
+            void MobsStatistic(Monster monster)
+            {
+                ClearMonsterWindow();
+                monster.ShowFace(22, 10);
+                Console.SetCursorPosition(23, 17);
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write(monster.Name);
+                Console.SetCursorPosition(23, 19);
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write($"Здоровье {monster.Hp}");
+                Console.SetCursorPosition(20, 20);
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write($"Базовая атака {monster.BasicHit[0]}/{monster.BasicHit[1]}");
+                Console.SetCursorPosition(18, 21);
+                Console.Write($"Абсолютная атака {monster.AbsoluteHit[0]}/{monster.AbsoluteHit[1]}");
+                Console.SetCursorPosition(17, 22);
+                Console.Write($"До абсолютного умения {monster.CooldownAbsoluteHit}");
+                Console.SetCursorPosition(14, 24);
+                Console.Write("1 - Обычная атака");
+                Console.SetCursorPosition(14, 25);
+                Console.Write("2 - Абсолютная атака");
+                Console.SetCursorPosition(15, 26);
+                Console.Write("3 - Использовать шоколад");
+                Console.SetCursorPosition(15, 27);
+                Console.Write("4 - Использовать бинт");
+                Console.SetCursorPosition(15, 28);
+                Console.Write("5 - Использовать энергетик");
+            }
+
+
+            void Border()
+            {
+                for (int i = 0; i < Console.WindowWidth; i++)
                 {
-                    ClearMonsterWindow();
-                    monster.ShowFace(22, 10);
-                    Console.SetCursorPosition(23, 17);
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.Write(monster.Name);
-                    Console.SetCursorPosition(23, 19);
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.Write($"Здоровье {monster.Hp}");
-                    Console.SetCursorPosition(20, 20);
-                    Console.ForegroundColor = ConsoleColor.White;
-                    Console.Write($"Базовая атака {monster.BasicHit[0]}/{monster.BasicHit[1]}");
-                    Console.SetCursorPosition(18, 21);
-                    Console.Write($"Абсолютная атака {monster.AbsoluteHit[0]}/{monster.AbsoluteHit[1]}");
-                    Console.SetCursorPosition(17, 22);
-                    Console.Write($"До абсолютного умения {monster.CooldownAbsoluteHit}");
-                    Console.SetCursorPosition(14, 24);
-                    Console.Write("1 - Обычная атака");
-                    Console.SetCursorPosition(14, 25);
-                    Console.Write("2 - Абсолютная атака");
-                    Console.SetCursorPosition(15, 26);
-                    Console.Write("3 - Использовать шоколад");
-                    Console.SetCursorPosition(15, 27);
-                    Console.Write("4 - Использовать бинт");
-                    Console.SetCursorPosition(15, 28);
-                    Console.Write("5 - Использовать энергетик");
+                    Console.SetCursorPosition(i, 0);
+                    Console.Write("═");
+
+                    Console.SetCursorPosition(i, Console.WindowHeight - 1);
+                    Console.Write("═");
                 }
 
-
-                void Border()
+                for (int i = 1; i < Console.WindowHeight - 1; i++)
                 {
-                    for (int i = 0; i < Console.WindowWidth; i++)
-                    {
-                        Console.SetCursorPosition(i, 0);
-                        Console.Write("═");
+                    Console.SetCursorPosition(0, i);
+                    Console.Write($"║");
 
-                        Console.SetCursorPosition(i, Console.WindowHeight - 1);
-                        Console.Write("═");
-                    }
+                    Console.SetCursorPosition(Console.WindowWidth - 1, i);
+                    Console.Write("║");
 
-                    for (int i = 1; i < Console.WindowHeight - 1; i++)
-                    {
-                        Console.SetCursorPosition(0, i);
-                        Console.Write($"║");
-
-                        Console.SetCursorPosition(Console.WindowWidth - 1, i);
-                        Console.Write("║");
-
-                        Console.SetCursorPosition(Console.WindowWidth / 2, i);
-                        Console.Write("║");
-                    }
+                    Console.SetCursorPosition(Console.WindowWidth / 2, i);
+                    Console.Write("║");
                 }
+            }
 
-                void PlayerStatistic()
-                {
-                    //24 max
-                    ClearPlayerWindow();
-                    _hero.ShowFace(86, 12);
-                    Console.SetCursorPosition(85, 19);
-                    Console.Write($"Здоровье {_hero.Hp}");
-                    Console.SetCursorPosition(82, 20);
-                    Console.Write($"Базовая атака {_hero.BasicHit[0]}/{_hero.BasicHit[1]}");
-                    Console.SetCursorPosition(80, 21);
-                    Console.Write($"Абсолютная атака {_hero.AbsoluteHit[0]}/{_hero.AbsoluteHit[1]}");
-                    Console.SetCursorPosition(79, 22);
-                    Console.Write($"До абсолютного умения {_hero.CooldownAbsoluteHit}");
-                    _hero.Inventory.Show(61, 23);
+            void PlayerStatistic()
+            {
+                //24 max
+                ClearPlayerWindow();
+                _hero.ShowFace(86, 12);
+                Console.SetCursorPosition(85, 19);
+                Console.Write($"Здоровье {_hero.Hp}");
+                Console.SetCursorPosition(82, 20);
+                Console.Write($"Базовая атака {_hero.BasicHit[0]}/{_hero.BasicHit[1]}");
+                Console.SetCursorPosition(80, 21);
+                Console.Write($"Абсолютная атака {_hero.AbsoluteHit[0]}/{_hero.AbsoluteHit[1]}");
+                Console.SetCursorPosition(79, 22);
+                Console.Write($"До абсолютного умения {_hero.CooldownAbsoluteHit}");
+                _hero.Inventory.Show(61, 23);
 
-                    Console.SetCursorPosition(63, 3);
-                    Console.Write($"↑←<> - Ходить");
-                    Console.SetCursorPosition(63, 4);
-                    Console.Write($"! - сундук");
-                    Console.SetCursorPosition(63, 5);
-                    Console.Write($"@ - Обычный противник");
-                    Console.SetCursorPosition(63, 6);
-                    Console.Write($"% - Элитный противник");
-                    Console.SetCursorPosition(63, 7);
-                    Console.Write($"* - Вы");
+                Console.SetCursorPosition(63, 3);
+                Console.Write($"↑←<> - Ходить");
+                Console.SetCursorPosition(63, 4);
+                Console.Write($"! - сундук");
+                Console.SetCursorPosition(63, 5);
+                Console.Write($"@ - Обычный противник");
+                Console.SetCursorPosition(63, 6);
+                Console.Write($"% - Элитный противник");
+                Console.SetCursorPosition(63, 7);
+                Console.Write($"* - Вы");
             }
                 #endregion
         }

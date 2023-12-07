@@ -21,7 +21,7 @@ namespace Lab_3_C.Models
             if (items.Count == 0)
             {
                 Console.SetCursorPosition(x, y);
-                Console.Write(" Инвентарь пуст");
+                Console.Write(" Инвентарь: пуст");
                 y++;
             }
             else
